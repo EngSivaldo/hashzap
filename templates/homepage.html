@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.js"
+      integrity="sha512-8BHxHDLsOHx+flIrQ0DrZcea7MkHqRU5GbTHmbdzMRnAaoCIkZ97PqZcXJkKZckMMhqfoeaJE+DNUVuyoQsO3Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"
+      integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
+  </head>
+
+  <body>
+    <h1>Titulo da HashZap</h1>
+
+    <div id="lista-mensagens"></div>
+
+    <input type="text" id="usuario" placeholder="usuario" required />
+    <input type="text" id="mensagem" placeholder="mensagem" required />
+    <div>
+      <p>Caixa de usuário</p>
+    </div>
+    <div>
+      <p>caixa com msg do usuário</p>
+    </div>
+    <div>
+      <button id="botao">Enviar</button>
+    </div>
+  </body>
+
+  <script type="text/javascript">
+    $(document).ready(function () {
+      /*criou tunel*/
+      var socket = io("192.168.0.105");
+      socket.on("connect", function () {
+        console.log("Usuário conectou!");
+      });
+
+      /*vai criar um novo paragrafo de msg(data)*/
+      socket.on("message", function (data) {
+        console.log("Disparou msg!");
+        $("#lista-mensagens").append($("<p>").text(data));
+      });
+
+      /*chamar o evento de mensagem*/
+      $("#botao").on("click", function () {
+        console.log("mensagem");
+        socket.send($("#usuario").val() + ":" + $("#mensagem").val());
+        $("mensagem").val("");
+      });
+    });
+  </script>
+</html>
